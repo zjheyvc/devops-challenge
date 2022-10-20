@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: challenge-app
+  labels:
+    app: flask
+spec:
+  selector:
+    matchLabels:
+      app: flask
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: flask
+    spec:
+      containers:
+      - name: application
+        image: image
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5000
