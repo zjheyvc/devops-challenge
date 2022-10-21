@@ -6,6 +6,12 @@ namePrefix: develop-
 resources:
 - ../../base
 
+commonLabels:
+  environment: develop
+
+transformers:
+- monitoring-labels.yaml
+
 images:
 - name: image
   newName: ghcr.io/zjheyvc/devops-challenge

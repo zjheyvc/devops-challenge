@@ -1,0 +1,15 @@
+apiVersion: builtin
+kind: LabelTransformer
+metadata:
+  name: monitoring-labels
+labels:
+  tags.datadoghq.com/env: "develop"
+  tags.datadoghq.com/service: "flask"
+  tags.datadoghq.com/version: "v1"
+fieldSpecs:
+- path: metadata/labels
+  create: true
+  kind: Deployment
+- path: spec/template/metadata/labels
+  create: true
+  kind: Deployment
