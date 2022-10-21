@@ -18,6 +18,5 @@ spec:
       containers:
       - name: application
         image: image
-        imagePullPolicy: Never
         ports:
         - containerPort: 5000
