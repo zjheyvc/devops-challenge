@@ -25,7 +25,7 @@ jobs:
         tags: ${{ env.IMAGE_TAG }},latest
     - name: Configure image
       run: |
-        sed -i "s|newName:.*|newName: ghcr.io/${{ github.repository }}|g;s|newTag:.*|newTag: ${{ env.IMAGE_TAG }}|g" deploy/overlays/${{ env.RELEASE }}/kustomization.yaml
+        sed -i "s|newName:.*|newName: ghcr.io/${{ github.repository }}|g;s|newTag:.*|newTag: \"${{ env.IMAGE_TAG }}\"|g" deploy/overlays/${{ env.RELEASE }}/kustomization.yaml
     - name: Update manifest
       uses: stefanzweifel/git-auto-commit-action@v4
       with:
