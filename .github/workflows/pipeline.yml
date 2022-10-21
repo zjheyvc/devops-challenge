@@ -1,0 +1,32 @@
+on:
+  push:
+    branches:
+    - main
+    - develop
+
+jobs:
+  build:
+    name: 'Build and Push Image'
+    runs-on: ubuntu-latest
+    steps:
+    - name: "Build:checkout"
+      uses: actions/checkout@v3
+    - name: Set variables
+      run: |
+        echo "IMAGE_TAG=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+        echo "RELEASE=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+    - name: Push
+      uses: docker/build-push-action@v1
+      with:
+        username: ${{ github.actor }}
+        password: ${{ secrets.PERSONAL_TOKEN }}
+        registry: ghcr.io
+        push: true
+        tags: ${{ env.IMAGE_TAG }},latest
+    - name: Configure image
+      run: |
+        sed -i "s|newName:.*|newName: ghcr.io/${{ github.repository }}|g;s|newTag:.*|newTag: ${{ env.IMAGE_TAG }}|g" deploy/overlays/${{ env.RELEASE }}/kustomization.yaml
+    - name: Update manifest
+      uses: stefanzweifel/git-auto-commit-action@v4
+      with:
+        commit_message: Update deployment image and tag to ${{ env.IMAGE_TAG }}

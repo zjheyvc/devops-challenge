@@ -1,0 +1,14 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: develop-challenge-app
+  namespace: argocd
+spec:
+  source:
+    repoURL: https://github.com/zjheyvc/devops-challenge.git
+    targetRevision: develop
+    path: deploy/overlays/develop
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  project: default
