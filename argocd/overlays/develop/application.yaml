@@ -13,5 +13,5 @@ spec:
     namespace: default
   project: default
   syncPolicy:
-    syncOptions:
-    - ApplyOutOfSyncOnly=true
+    automated:
+      prune: true
