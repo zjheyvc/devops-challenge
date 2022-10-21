@@ -1,0 +1,79 @@
+---
+apiVersion: datadoghq.com/v1alpha1
+kind: DatadogMonitor
+metadata:
+  name: pods-imagepullbackoff
+  namespace: datadog
+spec:
+  query: "max(last_10m):max:kubernetes_state.container.status_report.count.waiting{reason:imagepullbackoff} by {service,env,pod_name,kube_namespace} >= 1"
+  type: "query alert"
+  name: "[kubernetes] Pod {{pod_name.name}} is ImagePullBackOff on namespace {{kube_namespace.name}}"
+  message: "pod {{pod_name.name}} is ImagePullBackOff on {{kube_namespace.name}}\nThis could happen for several reasons, for example a bad image path or tag or if the credentials for pulling images are not configured properly."
+  tags:
+    - "integration:kubernetes"
+---
+apiVersion: datadoghq.com/v1alpha1
+kind: DatadogMonitor
+metadata:
+  name: pods-crashloopbackoff
+  namespace: datadog
+spec:
+  query: "max(last_10m):max:kubernetes_state.container.status_report.count.waiting{reason:crashloopbackoff} by {service,env,kube_deployment} >= 1"
+  type: "query alert"
+  name: "[kubernetes] Pod {{pod_name.name}} is CrashLoopBackOff in {{kube_deployment.name}} app"
+  message: "pod {{pod_name.name}} is in CrashLoopBackOff in {{kube_deployment.name}} app."
+  tags:
+    - "integration:kubernetes"
+---
+apiVersion: datadoghq.com/v1alpha1
+kind: DatadogMonitor
+metadata:
+  name: pods-pending
+  namespace: datadog
+spec:
+  query: "max(last_5m):sum:kubernetes_state.pod.status_phase{pod_phase:pending} by {service,env,kube_deployment} >= 2"
+  type: "query alert"
+  name: "[kubernetes] Monitor Kubernetes Pending Pods in Applications"
+  message: "More than ten pods are pending state in {{kube_deployment.name}} deploy."
+  tags:
+    - "integration:kubernetes"
+---
+apiVersion: datadoghq.com/v1alpha1
+kind: DatadogMonitor
+metadata:
+  name: pods-failed
+  namespace: datadog
+spec:
+  query: "max(last_5m):sum:kubernetes_state.pod.status_phase{pod_phase:failed} by {service,env,kube_deployment} > 2"
+  type: "query alert"
+  name: "[kubernetes] Monitor Kubernetes Failed Pods in Applications"
+  message: "More than ten pods are failing state in {{kube_deployment.name}} deploy."
+  tags:
+    - "integration:kubernetes"
+---
+apiVersion: datadoghq.com/v1alpha1
+kind: DatadogMonitor
+metadata:
+  name: pods-restarting
+  namespace: datadog
+spec:
+  query: "max(last_5m):avg:kubernetes.containers.restarts{*} by {service,env,pod_name} > 4"
+  type: "query alert"
+  name: "[kubernetes] Monitor Kubernetes Pods Restarting"
+  message: "Pods {{pod_name.name}} are restarting multiple times in the last five minutes."
+  tags:
+    - "integration:kubernetes"
+---
+apiVersion: datadoghq.com/v1alpha1
+kind: DatadogMonitor
+metadata:
+  name: deployment-replicas
+  namespace: datadog
+spec:
+  query: "avg(last_15m):avg:kubernetes_state.deployment.replicas_desired{*} by {kube_deployment} - avg:kubernetes_state.deployment.replicas_available{*} by {kube_deployment} >= 2"
+  type: "query alert"
+  name: "[kubernetes] Monitor Kubernetes Deployments Replica Pods"
+  message: "More than one Deployments Replica's pods are down."
+  tags:
+    - "integration:kubernetes"
+---
