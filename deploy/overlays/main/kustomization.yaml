@@ -6,7 +6,13 @@ namePrefix: main-
 resources:
 - ../../base
 
+commonLabels:
+  environment: main
+
+transformers:
+- monitoring-labels.yaml
+
 images:
 - name: image
-  newName: image
-  newTag: tag
+  newName: ghcr.io/zjheyvc/devops-challenge
+  newTag: 53b543e

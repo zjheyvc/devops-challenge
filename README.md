@@ -35,3 +35,13 @@ Deploy Argo Applications
 make k8s-dev
 make k8s-main
 ```
+
+Running up on kubernetes
+```bash
+make up
+```
+
+Clean
+```bash
+make clean
+```
