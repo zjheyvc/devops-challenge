@@ -15,17 +15,23 @@ run:
 stop:
 	docker stop $(APP_NAME); docker rm $(APP_NAME)
 
-k8s-dev:
+app-dev:
 	kubectl apply -f argocd/overlays/develop
 
-k8s-main:
+app-main:
 	kubectl apply -f argocd/overlays/main
 
 datadog-rules:
 	kubectl apply -f monitoring
 
-up: k8s-dev k8s-main datadog-rules
+up: app-dev app-main datadog-rules
 	kubectl get app -n argocd; kubectl get datadogmonitor -n datadog
 
 clean:
 	kubectl delete -f monitoring -f argocd/overlays/main -f argocd/overlays/develop
+
+show-dev:
+	kubectl port-forward svc/develop-challenge-svc 5000:80
+
+show-main:
+	kubectl port-forward svc/main-challenge-svc 5000:80
