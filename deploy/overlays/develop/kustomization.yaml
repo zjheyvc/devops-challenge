@@ -8,5 +8,5 @@ resources:
 
 images:
 - name: image
-  newName: image
-  newTag: tag
+  newName: ghcr.io/zjheyvc/devops-challenge
+  newTag: c657ed7
