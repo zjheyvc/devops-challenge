@@ -15,4 +15,4 @@ transformers:
 images:
 - name: image
   newName: ghcr.io/zjheyvc/devops-challenge
-  newTag: "c6b0cff"
+  newTag: "3832a72"
